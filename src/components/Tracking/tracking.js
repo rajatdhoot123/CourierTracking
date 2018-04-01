@@ -25,7 +25,7 @@ export default class Tracking extends Component {
         this.setState({ trackingId: e.target.value },() => {
             switch (this.state.selectedOption.value) {
                 case 'DelhiVery':
-                (this.state.trackingId.length == 13) &&
+                (this.state.trackingId.length >= 13) &&
                     this.getTrackingDetails('delhiVery', this.state.trackingId)
                         .then((result) => this.setState({ response: result.data, loading: false }))
                         .catch((error) => this.setState({ error: error, loading: false }))
@@ -71,8 +71,11 @@ export default class Tracking extends Component {
         const { selectedOption } = this.state;
         const value = selectedOption && selectedOption.value;
         let { response, error, loading } = this.state
+        console.log(typeof response,"Respon")
         return (
-            <div className="container d-flex justify-content-center align-self-center">
+            <div className="tracking d-flex align-items-center" style={{ minHeight: "500px" }}>
+            <div className="card mx-auto" style={{width: "60%"}}>
+            <div className="card-body d-flex">
                 <div className="w-25 mx-2">
                     <Select
                         name="form-field-name"
@@ -87,18 +90,20 @@ export default class Tracking extends Component {
                     id="trackingNo" value={this.state.trackingId} 
                     onChange={this.handleTrackingId} 
                     placeholder="Tracking Id" 
-                    readOnly={!this.state.selectedOption}/>
+                    readOnly={!this.state.selectedOption || !!loading}/>
                 </div>
                 <div className="form-group mx-2">
                     <div className="form-control d-flex" id="status" style={{minWidth: "230px"}}>
-                        <span>{(!!loading) ? 'Loading' : (!response) ? 'status' : this.state.response.result[0].detail}</span>
+                                <span>{(!!loading) ? 'Loading' : (!response) ? 'status' : Array.isArray(response.result) ? response.result[0].detail : response.result}</span>
                         {(!!loading) &&
                             <div className="sp sp-3balls"></div>
                         }
                     </div>
                     {(!!error) &&
-                        <small class="form-text" style={{color: "red"}}>Something went wrong try again.</small>
+                        <small className="form-text" style={{color: "red"}}>Something went wrong try again.</small>
                     }
+                </div>
+                </div>
                 </div>
             </div>
         );
