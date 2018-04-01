@@ -1,6 +1,11 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
-module.exports  = {
+const htmlWebpackPlugin = new HtmlWebPackPlugin({
+    template: "./src/index.html",
+    filename: "./index.html"
+});
+
+module.exports = {
     module: {
         rules: [
             {
@@ -9,13 +14,26 @@ module.exports  = {
                 use: {
                     loader: "babel-loader"
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            modules: false,
+                            importLoaders: 1,
+                            localIdentName: "[name]_[local]_[hash:base64]",
+                            sourceMap: true,
+                            minimize: true
+                        }
+                    }
+                ]
             }
         ]
     },
-    plugins: [
-        new HtmlWebPackPlugin({
-            template: "./src/index.html",
-            filename: "./index.html"
-        })
-    ]
-}
+    plugins: [htmlWebpackPlugin]
+};
