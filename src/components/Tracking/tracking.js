@@ -14,7 +14,7 @@ export default class Tracking extends Component {
     }
 
     handleChange = (selectedOption) => {
-        this.setState({ selectedOption });
+        this.setState({ selectedOption, trackingId: '', response: null });
     }
 
     getTrackingDetails = (courier, trackingId) => {
@@ -71,7 +71,6 @@ export default class Tracking extends Component {
         const { selectedOption } = this.state;
         const value = selectedOption && selectedOption.value;
         let { response, error, loading } = this.state
-        console.log(typeof response,"Respon")
         return (
             <div className="tracking d-flex align-items-center" style={{ minHeight: "500px" }}>
             <div className="card mx-auto" style={{width: "60%"}}>
