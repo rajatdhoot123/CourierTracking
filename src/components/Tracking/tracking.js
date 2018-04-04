@@ -83,7 +83,7 @@ export default class Tracking extends Component {
                         options={courierProvider}
                     />
                 </div>
-                <div className="form-group mx-2">
+                <div className="form-group w-25 mx-2">
                     <input type="text"
                     className="form-control" 
                     id="trackingNo" value={this.state.trackingId} 
@@ -91,8 +91,8 @@ export default class Tracking extends Component {
                     placeholder="Tracking Id" 
                     readOnly={!this.state.selectedOption || !!loading}/>
                 </div>
-                <div className="form-group mx-2">
-                    <div className="form-control d-flex" id="status" style={{minWidth: "230px"}}>
+                <div className="form-group w-50 mx-2">
+                    <div className="form-control d-flex" id="status">
                                 <span>{(!!loading) ? 'Loading' : (!response) ? 'status' : Array.isArray(response.result) ? response.result[0].detail : response.result}</span>
                         {(!!loading) &&
                             <div className="sp sp-3balls"></div>
