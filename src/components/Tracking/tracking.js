@@ -54,6 +54,12 @@ export default class Tracking extends Component {
                     .then((result) => this.setState({ response: result.data, loading: false }))
                     .catch((error) => this.setState({ error: error, loading: false }))
                     break;
+                case 'Gati':
+                (this.state.trackingId.length == 9) &&
+                    this.getTrackingDetails('gati', this.state.trackingId)
+                    .then((result) => this.setState({ response: result.data, loading: false }))
+                    .catch((error) => this.setState({ error: error, loading: false }))
+                    break;
                 default:
                     break;
             }
@@ -67,6 +73,7 @@ export default class Tracking extends Component {
             { value: 'Bluedart', label: 'Bluedart' },
             { value: 'Ecom', label: 'Ecom' },
             { value: 'XpressBees', label: 'Xpressbees' },
+            { value: 'Gati', label: 'Gati' },
         ]
         const { selectedOption } = this.state;
         const value = selectedOption && selectedOption.value;

@@ -13,7 +13,6 @@ class LoginModal extends Component {
 
     render() {
         let { isOpen } = this.props
-        console.log(isOpen,"isnpoerp")
         return (
             <Modal show={isOpen} height={"450px"} width={"400px"}>
                 <div className="mt-5">
