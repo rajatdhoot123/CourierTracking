@@ -2,12 +2,11 @@ import React,{ Component } from "react";
 import './modal.css';
 import PropTypes from "prop-types";
 import classnames from "classnames";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { toggleModal } from "../../actions/modal";
 
-export default class Modal extends Component {
-
-    state = {
-        show: false
-    }
+class Modal extends Component {
 
     static propTypes = {
         show: PropTypes.bool,
@@ -21,17 +20,12 @@ export default class Modal extends Component {
         width: "600px"
     }
 
-    componentDidMount() {
-        this.setState({show: this.props.show})
-    }
-    
     toggleModel = () => {
-        this.setState(prevState =>({ show: !prevState.show}))
+       this.props.toggleModal(!this.props.show)
     }
 
     render() {
-        let { show } = this.state
-        let { height, width } = this.props;
+        let { height, width, show } = this.props;
         return(
             <React.Fragment>
             <div className={classnames("c-modal",{'d-none': !show})} style={{height: height, width: width}}>
@@ -44,3 +38,14 @@ export default class Modal extends Component {
         )
     }
 }
+
+
+const mapStateToProps = ({loginModal}) => loginModal
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        toggleModal: toggleModal
+    }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(Modal)

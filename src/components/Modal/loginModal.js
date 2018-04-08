@@ -1,7 +1,8 @@
 import React,{Component} from 'react';
 import Modal from "./modal";
+import { connect } from "react-redux";
 
-export default class LoginModal extends Component {
+class LoginModal extends Component {
     state ={
         isPassVisible: false
     }
@@ -9,9 +10,12 @@ export default class LoginModal extends Component {
     isPassVisible = () => {
         this.setState(prevState => ({isPassVisible: !prevState.isPassVisible}))
     }
+
     render() {
+        let { isOpen } = this.props
+        console.log(isOpen,"isnpoerp")
         return (
-            <Modal show={true} height={"450px"} width={"400px"}>
+            <Modal show={isOpen} height={"450px"} width={"400px"}>
                 <div className="mt-5">
                     <h4 className="text-center">Login</h4>
                     <div className="d-flex justify-content-center mt-5">
@@ -44,3 +48,7 @@ export default class LoginModal extends Component {
         )
     }
 }
+
+const mapStateToProps = ({loginModal}) => loginModal;
+
+export default connect(mapStateToProps)(LoginModal)

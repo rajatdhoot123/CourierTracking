@@ -3,17 +3,26 @@ import { NavLink } from 'react-router-dom'
 import './navbar.css';
 import { firebaseLogin } from "../../Firebase/config";
 import LoginModal from "../Modal/loginModal";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'; 
+import { toggleModal } from "../../actions/modal";
 
-export default class Navbar extends Component {
+class Navbar extends Component {
+
+    handleLoginModal = () => {
+        this.props.toggleModal(true);
+    }
+
     render() {
         return (
             <React.Fragment>
+                <LoginModal show={true}/>
                 <nav className="fixed-top">
                     <div className="py-2">
                         <ul className="d-flex container my-auto">
                             <li className="mx-2"><NavLink to="/">Home</NavLink></li>
                             <li className="mx-2"><NavLink to="/profile">Profile</NavLink></li>     
-                            <li className="mx-2 ml-auto"><NavLink to="/about">Logout</NavLink></li>
+                            <li className="mx-2 ml-auto" onClick={this.handleLoginModal}>Login</li>
                         </ul>
                     </div>
                 </nav>
@@ -21,3 +30,11 @@ export default class Navbar extends Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        toggleModal: toggleModal
+    }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(Navbar)
