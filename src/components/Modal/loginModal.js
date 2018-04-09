@@ -1,21 +1,55 @@
 import React,{Component} from 'react';
 import Modal from "./modal";
 import { connect } from "react-redux";
+import "./loginModal.scss";
+import { firebaseLogin } from "../../Firebase/config";
 
 class LoginModal extends Component {
     state ={
-        isPassVisible: false
+        isPassVisible: false,
+        email: '',
+        password: '',
+        password2: ''
     }
 
     isPassVisible = () => {
         this.setState(prevState => ({isPassVisible: !prevState.isPassVisible}))
     }
 
+    handleInput = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+    handleSubmit = () => {
+        firebaseLogin(this.state.email,this.state.password)
+    }
     render() {
         let { isOpen } = this.props
         return (
-            <Modal show={isOpen} height={"450px"} width={"400px"}>
-                <div className="mt-5">
+            <Modal show={isOpen} height={"450px"} width={"650px"}>
+            <div className="loginModal">
+                <div id="login-box">
+                    <div className="left">
+                        <h1>Sign up</h1>
+                        {/* <input type="text" name="username" placeholder="Username" /> */}
+                        <input type="email" name="email" onChange={this.handleInput} value={this.state.email} placeholder="E-mail" />
+                        <input type="password" name="password" onChange={this.handleInput} readOnly={!this.state.email} placeholder="Password" />
+                        <input type="password" name="password2" onChange={this.handleInput} readOnly={!this.state.password} placeholder="Retype password" />
+                        <input type="submit" name="signup_submit" onClick={this.handleSubmit} value="Sign me up" />
+                    </div>
+
+                    <div className="right">
+                        <span className="loginwith">Sign in with<br />social network</span>
+
+                        <button className="social-signin email">Log in with email</button>
+                        <button className="social-signin facebook">Log in with facebook</button>
+                        <button className="social-signin twitter">Log in with Twitter</button>
+                        <button className="social-signin google">Log in with Google+</button>
+                    </div>
+                    <div className="or">OR</div>
+                </div>
+                </div>
+                {/* <div className="mt-5">
                     <h4 className="text-center">Login</h4>
                     <div className="d-flex justify-content-center mt-5">
                         <div className="w-100">
@@ -42,7 +76,7 @@ class LoginModal extends Component {
                             <button className="col-auto btn btn-primary btn-block btn-sm mt-4">Login</button>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </Modal>
         )
     }

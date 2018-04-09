@@ -16,7 +16,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/,
+                test: /\.(css|scss)$/,
                 use: [
                     {
                         loader: "style-loader"
@@ -30,7 +30,10 @@ module.exports = {
                             sourceMap: true,
                             minimize: true
                         }
-                    }
+                    },
+                    {
+                        loader: "sass-loader" // compiles Sass to CSS
+                    },
                 ]
             }
         ]
