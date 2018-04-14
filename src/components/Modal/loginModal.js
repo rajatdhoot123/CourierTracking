@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Modal from "./modal";
 import { connect } from "react-redux";
 import "./loginModal.scss";
-import { firebaseLogin } from "../../Firebase/config";
+import { firebaseLogin, firebaseSignup } from "../../Firebase/config";
 import { validateEmail, validatePassword } from "../utils/validation";
 
 class LoginModal extends Component {
@@ -15,7 +15,8 @@ class LoginModal extends Component {
             isPassword2Valid: false,
         },
         password: '',
-        password2: ''
+        password2: '',
+        mode: 'Sign up'
     }
 
     isPassVisible = () => {
@@ -28,43 +29,64 @@ class LoginModal extends Component {
         this.setState({ [e.target.name]: e.target.value }, () => {
             switch (type){ 
                 case "email":
-                    (validateEmail(email) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: true }}),() => console.log(this.state,"second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: false } })), () => console.log(this.state, "first")))
+                    (validateEmail(email) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: true }})) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: false } }))))
                     break;
                 case "password":
-                    (validatePassword(password) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: true } }), () => console.log(this.state, "second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: false }, password2: '' })), () => console.log(this.state, "first")))
+                    (validatePassword(password) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: true } })) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: false }, password2: '' }))))
                 break;
                 case "password2":
-                    (this.state.password == this.state.password2) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: true } }), () => console.log(this.state, "second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: false } })), () => console.log(this.state, "first"))
+                    (this.state.password == this.state.password2) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: true } })) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: false } })))
                 default:
                     break;
             }
         })
     }
 
+    handleMode = () => {
+        this.setState({
+            mode: "Login"
+        })
+    }
+
     handleSubmit = () => {
-        console.log(this.state,'this')
-        //firebaseLogin(this.state.email,this.state.password)
+        let {mode , email, password, isValid: {isEmailValid, isPassword2Valid, isPasswordValid }} = this.state;
+        switch (mode) {
+            case 'Sign up':
+                (isEmailValid && isPassword2Valid && isPasswordValid) ?
+                    firebaseSignup(email, password)
+                    :
+                    alert('something might wrong')  
+                break;
+            case 'Login':
+                firebaseLogin(email, password)
+                break;
+            default:
+                break;
+        }
     }
 
     render() {
         let { isOpen } = this.props
-        let { email, password, password2, isValid } = this.state
+        let { email, password, password2, isValid, mode } = this.state
         return (
-            <Modal show={isOpen} height={"450px"} width={"650px"}>
+            <Modal show={isOpen || true} height={"450px"} width={"650px"}>
             <div className="loginModal">
                 <div id="login-box">
                     <div className="left">
-                        <h1>Sign up</h1>
+                        <h1>{mode}</h1>
                         {/* <input type="text" name="username" placeholder="Username" /> */}
                         <input type="email" name="email" onChange={this.handleInput} value={email} placeholder="E-mail" />
                             <input type="password" name="password" onChange={this.handleInput} readOnly={!isValid.isEmailValid} value={password} placeholder="Password" />
+                        {(mode === 'Sign up') &&
                             <input type="password" name="password2" onChange={this.handleInput} readOnly={!isValid.isPasswordValid} value={password2} placeholder="Retype password" />
-                        <input type="submit" name="signup_submit" onClick={this.handleSubmit} value="Sign me up" />
+                        }
+                        <input type="submit" name="signup_submit" onClick={this.handleSubmit} value={mode} />
                     </div>
                     <div className="right">
                         <span className="loginwith">Sign in with<br />social network</span>
-
-                        <button className="social-signin email">Log in with email</button>
+                    {mode === 'Sign up' &&
+                        <button className="social-signin email" onClick={this.handleMode}>Log in with email</button>
+                    }
                         <button className="social-signin facebook">Log in with facebook</button>
                         <button className="social-signin twitter">Log in with Twitter</button>
                         <button className="social-signin google">Log in with Google+</button>
