@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Modal from "./modal";
 import { connect } from "react-redux";
 import "./loginModal.scss";
-import { firebaseLogin, firebaseSignup } from "../../Firebase/config";
+import { firebaseLogin, firebaseSignup, googleLogin } from "../../Firebase/config";
 import { validateEmail, validatePassword } from "../utils/validation";
 
 class LoginModal extends Component {
@@ -89,7 +89,7 @@ class LoginModal extends Component {
                     }
                         <button className="social-signin facebook">Log in with facebook</button>
                         <button className="social-signin twitter">Log in with Twitter</button>
-                        <button className="social-signin google">Log in with Google+</button>
+                        <button className="social-signin google" onClick={googleLogin}>Log in with Google+</button>
                     </div>
                     <div className="or">OR</div>
                 </div>

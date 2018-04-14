@@ -1,13 +1,5 @@
 import * as firebase from "firebase";
-
-var config = {
-  apiKey: "AIzaSyBt_kBEm9iBA8A6YLuLakk1nA7PzQkXEGY",
-  authDomain: "couriertrackingapp.firebaseapp.com",
-  databaseURL: "https://couriertrackingapp.firebaseio.com",
-  projectId: "couriertrackingapp",
-  storageBucket: "couriertrackingapp.appspot.com",
-  messagingSenderId: "893280570160"
-};
+import { config } from "./config";
 firebase.initializeApp(config);
 
 export const firebaseSignup = (email, password) =>
@@ -25,8 +17,19 @@ export const firebaseLogin = (email, password) => firebase.auth().signInWithEmai
       // ...
     });
 
-export const firebaseSignOut = () => firebase.auth().signOut().then(() => {
-     
-    }).catch(error => {
-          console.log(error,"error")
-    });
+export const firebaseSignOut = () => firebase.auth().signOut().then(() => {     
+}).catch(error => {
+  console.log(error,"error")
+});
+
+let providerGoogle = new firebase.auth.GoogleAuthProvider();
+export const googleLogin = () => firebase.auth().signInWithPopup(providerGoogle).then((result) => {
+  let token = result.credential.accessToken;
+  let user = result.user;
+}).catch(function (error) {
+  console.log(error)
+  let errorCode = error.code;
+  let errorMessage = error.message;
+  let email = error.email;
+  let credential = error.credential;
+});
