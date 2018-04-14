@@ -3,11 +3,17 @@ import Modal from "./modal";
 import { connect } from "react-redux";
 import "./loginModal.scss";
 import { firebaseLogin } from "../../Firebase/config";
+import { validateEmail, validatePassword } from "../utils/validation";
 
 class LoginModal extends Component {
     state ={
         isPassVisible: false,
         email: '',
+        isValid: {
+            isEmailValid: false,
+            isPasswordValid: false,
+            isPassword2Valid: false,
+        },
         password: '',
         password2: ''
     }
@@ -17,14 +23,32 @@ class LoginModal extends Component {
     }
 
     handleInput = (e) => {
-        this.setState({[e.target.name]: e.target.value})
+        let { email, password, password2, isValid } = this.state
+        let type = e.target.name;
+        this.setState({ [e.target.name]: e.target.value }, () => {
+            switch (type){ 
+                case "email":
+                    (validateEmail(email) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: true }}),() => console.log(this.state,"second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isEmailValid: false } })), () => console.log(this.state, "first")))
+                    break;
+                case "password":
+                    (validatePassword(password) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: true } }), () => console.log(this.state, "second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPasswordValid: false }, password2: '' })), () => console.log(this.state, "first")))
+                break;
+                case "password2":
+                    (this.state.password == this.state.password2) ? this.setState(prevState => ({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: true } }), () => console.log(this.state, "second")) : this.setState(prevState => (({ ...prevState, isValid: { ...prevState.isValid, isPassword2Valid: false } })), () => console.log(this.state, "first"))
+                default:
+                    break;
+            }
+        })
     }
 
     handleSubmit = () => {
-        firebaseLogin(this.state.email,this.state.password)
+        console.log(this.state,'this')
+        //firebaseLogin(this.state.email,this.state.password)
     }
+
     render() {
         let { isOpen } = this.props
+        let { email, password, password2, isValid } = this.state
         return (
             <Modal show={isOpen} height={"450px"} width={"650px"}>
             <div className="loginModal">
@@ -32,12 +56,11 @@ class LoginModal extends Component {
                     <div className="left">
                         <h1>Sign up</h1>
                         {/* <input type="text" name="username" placeholder="Username" /> */}
-                        <input type="email" name="email" onChange={this.handleInput} value={this.state.email} placeholder="E-mail" />
-                        <input type="password" name="password" onChange={this.handleInput} readOnly={!this.state.email} placeholder="Password" />
-                        <input type="password" name="password2" onChange={this.handleInput} readOnly={!this.state.password} placeholder="Retype password" />
+                        <input type="email" name="email" onChange={this.handleInput} value={email} placeholder="E-mail" />
+                            <input type="password" name="password" onChange={this.handleInput} readOnly={!isValid.isEmailValid} value={password} placeholder="Password" />
+                            <input type="password" name="password2" onChange={this.handleInput} readOnly={!isValid.isPasswordValid} value={password2} placeholder="Retype password" />
                         <input type="submit" name="signup_submit" onClick={this.handleSubmit} value="Sign me up" />
                     </div>
-
                     <div className="right">
                         <span className="loginwith">Sign in with<br />social network</span>
 
@@ -49,34 +72,6 @@ class LoginModal extends Component {
                     <div className="or">OR</div>
                 </div>
                 </div>
-                {/* <div className="mt-5">
-                    <h4 className="text-center">Login</h4>
-                    <div className="d-flex justify-content-center mt-5">
-                        <div className="w-100">
-                            <label className="sr-only" htmlFor="inlineFormInputGroup">Username</label>
-                            <div className="input-group my-2">
-                                <div className="input-group-prepend">
-                                    <div className="input-group-text"><i className="material-icons">email</i></div>
-                                </div>
-                                <input type="email" className="form-control" id="inlineFormInputGroup" placeholder="email" />
-                            </div>
-                            <label className="sr-only" htmlFor="inputPassword">Password</label>
-                            <div className="input-group my-2">
-                                <div className="input-group-prepend">
-                                    <div className="input-group-text"><i className="material-icons">lock</i></div>
-                                </div>
-                                <input type={this.state.isPassVisible ? "text" : "password"} className="form-control border-right-0" id="inputPassword" placeholder="Password" />
-                                <div className="input-group-append">
-                                    <div className="input-group-text" 
-                                    onClick={this.isPassVisible} 
-                                    style={{ backgroundColor: "transparent", cursor: "pointer" }}>
-                                    <i className="material-icons">remove_red_eye</i></div>
-                                </div>
-                            </div>
-                            <button className="col-auto btn btn-primary btn-block btn-sm mt-4">Login</button>
-                        </div>
-                    </div>
-                </div> */}
             </Modal>
         )
     }
