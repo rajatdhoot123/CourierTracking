@@ -1,16 +1,14 @@
 import React, { Component } from "react";
-import Tracking from '../Tracking/tracking';
-import Navbar from '../Navbar/navbar';
+import Tracking from "../Tracking/tracking";
 
 class Home extends Component {
-    render() {
-        return (
-            <React.Fragment>
-            <div><Navbar /></div>
-            <div><Tracking /></div>
-            </React.Fragment>
-        )
-    }
+  render() {
+    return (
+      <React.Fragment>
+          <Tracking />
+      </React.Fragment>
+    );
+  }
 }
 
 export default Home;

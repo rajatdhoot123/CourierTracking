@@ -69,7 +69,7 @@ class LoginModal extends Component {
         let { isOpen } = this.props
         let { email, password, password2, isValid, mode } = this.state
         return (
-            <Modal show={isOpen || true} height={"450px"} width={"650px"}>
+            <Modal show={isOpen} height={"450px"} width={"650px"}>
             <div className="loginModal">
                 <div id="login-box">
                     <div className="left">

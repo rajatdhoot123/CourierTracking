@@ -16,7 +16,6 @@ const fakeAuth = {
 
 
 export const ProtectedRoutes = ({ component: Component, ...rest }) => {
-    console.log(fakeAuth.isAuthenticated,"Componenr");
     <Route {...rest} render={(props) => (
         fakeAuth.isAuthenticated ? 
         <Component {...props} />

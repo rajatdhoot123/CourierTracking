@@ -25,7 +25,7 @@ export default class Tracking extends Component {
         this.setState({ trackingId: e.target.value },() => {
             switch (this.state.selectedOption.value) {
                 case 'DelhiVery':
-                (this.state.trackingId.length >= 13) &&
+                (this.state.trackingId.length >= 12) &&
                     this.getTrackingDetails('delhiVery', this.state.trackingId)
                         .then((result) => this.setState({ response: result.data, loading: false }))
                         .catch((error) => this.setState({ error: error, loading: false }))

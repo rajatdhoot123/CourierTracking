@@ -21,6 +21,7 @@ class Navbar extends Component {
                         <ul className="d-flex container my-auto">
                             <li className="mx-2"><NavLink to="/">Home</NavLink></li>
                             <li className="mx-2"><NavLink to="/profile">Profile</NavLink></li>     
+                            <li className="mx-2"><NavLink to="/orders">Orders</NavLink></li>     
                             <li className="mx-2 ml-auto" onClick={this.handleLoginModal}><a href="#0" >Login</a></li>
                         </ul>
                     </div>
